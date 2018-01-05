@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+body{
+  font-family: Roboto, "Helvetica Neue", sans-serif
+}
+
+.clean-button{
+  padding:0;
+  background: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.side-nav {
+  width: 200px;
+
+  .mat-expansion-panel.noEleveation{
+    box-shadow: none;
+  }
+}
