@@ -9,7 +9,6 @@ import { TeamsDataService } from './services/teams-data.service';
 import { TeamViewContainerComponent } from './containers/team-view-container/team-view-container.component';
 import { TeamsRoutingModule } from './teams-routing.module';
 import { UsersModule } from '../users/users.module';
-import { RolesModule } from '../roles/roles.module';
 
 @NgModule({
   imports: [
@@ -17,8 +16,7 @@ import { RolesModule } from '../roles/roles.module';
     TeamsRoutingModule,
     MatListModule,
     MatTabsModule,
-    UsersModule,
-    RolesModule
+    UsersModule
   ],
   providers: [TeamsService, TeamsDataService],
   declarations: [TeamsContainerComponent,

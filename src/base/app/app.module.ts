@@ -9,7 +9,6 @@ import * as fromRoot from './reducers';
 import { TeamsModule } from './teams/teams.module';
 import { AppRoutingModule } from './app-routing.module';
 import { UsersModule } from './users/users.module';
-import { RolesModule } from './roles/roles.module';
 
 @NgModule({
   declarations: [
@@ -21,8 +20,7 @@ import { RolesModule } from './roles/roles.module';
     AppRoutingModule,
     StoreModule.forRoot(fromRoot.reducers),
     TeamsModule,
-    UsersModule,
-    RolesModule
+    UsersModule
   ],
   providers: [],
   bootstrap: [AppComponent]
