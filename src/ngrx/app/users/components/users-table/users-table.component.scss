@@ -1,0 +1,40 @@
+:host{
+  display: flex;
+  flex: 1;
+}
+.container{
+  width: 100%;
+}
+.mat-column-select {
+  overflow: visible;
+}
+
+.mat-column-id, .mat-column-avatar {
+    display: flex;
+    justify-content: center;
+
+}
+.mat-column-email{
+  flex:5
+}
+.mat-column-action{
+  flex:1;
+  display: flex;
+  justify-content: center;
+  .mat-icon-button{
+    font-size:18px;
+    width: 26px;
+    height: 26px;
+    line-height: 18px;
+    .mat-icon {
+      font-size:18px;
+      line-height: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.mat-column-team, .mat-column-username, .mat-column-firstName, .mat-column-lastName{
+  flex:3
+}

@@ -1,0 +1,87 @@
+<div class="container mat-elevation-z8">
+
+  <mat-table #table [dataSource]="usersDataSource" >
+
+    <ng-container *ngIf="multipleSelection" matColumnDef="select" >
+      <mat-header-cell  *matHeaderCellDef>
+          <mat-checkbox (change)="headerCheckboxChange($event)"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="cellCheckboxChange($event,row)"
+                        [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef>
+        <ng-container *ngIf="multipleSelection">
+          <button  mat-icon-button class="clean-button" [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu  #menu="matMenu" >
+              <button mat-menu-item (click)="moveSelectedUsers()" >
+                <mat-icon>content_cut</mat-icon>
+                <span>Move Selected</span>
+              </button>
+              <button mat-menu-item (click)="deleteSelectedUsers()" >
+                <mat-icon>delete</mat-icon>
+                <span>Delete Selected</span>
+              </button>
+          </mat-menu>
+        </ng-container>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+
+          <button  mat-icon-button color="primary" (click)="moveSelectedUsers(row)" >
+            <mat-icon>content_cut</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="deleteSelectedUsers(row)"  >
+            <mat-icon>delete</mat-icon>
+          </button>
+
+      </mat-cell>
+
+    </ng-container>
+
+    <ng-container matColumnDef="avatar" >
+        <mat-header-cell *matHeaderCellDef>Avatar</mat-header-cell>
+        <mat-cell *matCellDef="let user" >
+          <img style="width: 40px; height:40px;" [src]="user.info.avatar" />
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="id" >
+      <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+      <mat-header-cell *matCellDef="let user" >{{user.id}}</mat-header-cell>
+    </ng-container>
+    <ng-container matColumnDef="username" >
+      <mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+      <mat-cell *matCellDef="let user" >{{user.username}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="email" >
+      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+      <mat-cell *matCellDef="let user" >{{user.email}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="firstName" >
+      <mat-header-cell *matHeaderCellDef>First Name</mat-header-cell>
+      <mat-cell *matCellDef="let user" >{{user.info.firstName}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="lastName" >
+      <mat-header-cell *matHeaderCellDef>Last Name</mat-header-cell>
+      <mat-cell *matCellDef="let user" >{{user.info.lastName}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="team" >
+      <mat-header-cell *matHeaderCellDef>Team</mat-header-cell>
+      <mat-cell *matCellDef="let user" >{{user.team?.name}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row  *matHeaderRowDef="displayedColumns" ></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+  </mat-table>
+
+</div>

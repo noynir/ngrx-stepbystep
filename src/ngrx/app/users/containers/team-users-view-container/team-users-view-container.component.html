@@ -1,0 +1,7 @@
+<div>
+
+<app-users-table [users]="teamMembers$ | async"
+                 [multipleSelection]="true"
+                   (moveUsersClick)="moveUsers($event)"
+                 (deleteUsersClick)="removeUsers($event)" >  </app-users-table>
+</div>

@@ -33,7 +33,7 @@ server.put('/users',(req,res)=>{
       .write();
   })).then((data)=>{
     console.log(data);
-    res.send({success:true})
+    res.send({success:true, users:users});
   });
 });
 
