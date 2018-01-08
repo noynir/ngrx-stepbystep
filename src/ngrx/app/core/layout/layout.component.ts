@@ -7,6 +7,10 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class LayoutComponent implements OnInit {
 
+  @Input()
+  sideNavOpen: boolean;
+
+
   constructor() { }
 
   ngOnInit() {

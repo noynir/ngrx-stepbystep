@@ -4,11 +4,11 @@ export interface State {
   showSidenav: boolean;
 }
 
-export const intialState: State = {
+export const initialState: State = {
   showSidenav: true
 };
 
-export function reducer (state: State = intialState, action: LayoutActions  ) {
+export function reducer (state: State = initialState, action: LayoutActions  ) {
   switch ( action.type ) {
     case LayoutActionTypes.CloseSidenav:
       return { showSidenav: false};

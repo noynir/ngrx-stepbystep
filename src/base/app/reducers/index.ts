@@ -7,7 +7,7 @@ export interface AppState {
 }
 
 const initialState = {
-  layout: fromLayout.intialState
+  layout: fromLayout.initialState
 }
 
 export const reducers: ActionReducerMap<AppState> = {

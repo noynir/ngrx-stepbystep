@@ -41,7 +41,8 @@ export class TeamUsersViewContainerComponent implements OnInit,OnDestroy {
       });
 
 
-    this.allTeams$ = this.teamsService.getTeams().share();
+    this.allTeams$ = this.teamsService.allTeams$;
+    this.teamsService.getTeams();
 
     this.teamMembers$ = Observable.combineLatest(
       this.usersService.allUsers$,

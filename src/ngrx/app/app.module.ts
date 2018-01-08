@@ -9,10 +9,10 @@ import * as fromRoot from './reducers';
 import { TeamsModule } from './teams/teams.module';
 import { AppRoutingModule } from './app-routing.module';
 import { UsersModule } from './users/users.module';
-import {MatButtonModule, MatIconModule} from '@angular/material';
 import {EffectsModule} from '@ngrx/effects';
 import {environment} from '../environments/environment';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {MaterialModule} from './material/material.module';
 
 @NgModule({
   declarations: [
@@ -20,8 +20,7 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
   ],
   imports: [
     CoreModule,
-    MatIconModule,
-    MatButtonModule,
+    MaterialModule,
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot(fromRoot.reducers),

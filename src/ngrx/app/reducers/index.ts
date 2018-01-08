@@ -1,15 +1,19 @@
-import * as fromMenu from '../core/reducers/menu';
-import { ActionReducerMap } from '@ngrx/store';
+import * as fromLayout from '../core/reducers/layout';
+import {ActionReducerMap, createFeatureSelector, createSelector} from '@ngrx/store';
+import {AppState} from '../../../base/app/reducers';
 
 export interface AppState {
-  menu: fromMenu.State;
+  layout: fromLayout.State;
 
 }
 
 const initialState = {
-  menu: fromMenu.intialState
+  layout: fromLayout.initialState
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-  menu: fromMenu.reducer
+  layout: fromLayout.reducer
 }
+
+export const getLayout = createFeatureSelector<fromLayout.State>('layout');
+export const getLayoutShowSidenav = createSelector(getLayout, fromLayout.getShowSideNav);

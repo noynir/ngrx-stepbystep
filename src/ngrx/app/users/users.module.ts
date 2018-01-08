@@ -16,22 +16,14 @@ import {StoreModule} from '@ngrx/store';
 import * as fromUsers from './reducers/users';
 import {EffectsModule} from '@ngrx/effects';
 import {UsersEffects} from './effects/users';
+import {MaterialModule} from '../material/material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     UsersRoutingModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatMenuModule,
-    MatIconModule,
-    MatListModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatOptionModule,
+    MaterialModule,
     StoreModule.forFeature('users', fromUsers.reducers),
     EffectsModule.forFeature([UsersEffects])
 

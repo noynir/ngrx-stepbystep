@@ -29,7 +29,7 @@ export class UsersViewContainerComponent implements OnInit {
               private dialog: MatDialog) { }
   ngOnInit() {
 
-      this.allTeams$ = this.teamsService.getTeams();
+      this.allTeams$ = this.teamsService.allTeams$;
 
       this.users$ =  Observable.combineLatest(
         this.usersService.allUsers$,

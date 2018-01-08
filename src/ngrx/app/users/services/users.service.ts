@@ -14,15 +14,14 @@ import {UsersEffects} from '../effects/users';
 export class UsersService {
 
   constructor(private store: Store<fromUsers.State>,
-            private effects: UsersEffects,
-            private dataService: UsersDataService) { }
+            private effects: UsersEffects) { }
 
   get allUsers$ (): Observable<Array<UserModel>> {
 
     return this.store.select(fromUsers.selectAll);
   }
 
-  get usersUpdated$():Observable<boolean> {
+  get usersUpdated$(): Observable<boolean> {
     return this.effects.updateUsers$.map( action =>  action.type === UsersActionTypes.UsersUpateComplete);
   }
   getUsers(){

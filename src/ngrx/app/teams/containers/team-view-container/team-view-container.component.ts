@@ -16,11 +16,10 @@ export class TeamViewContainerComponent implements OnInit {
   constructor(private route: ActivatedRoute, private teamsService: TeamsService) { }
 
   ngOnInit() {
-
-
     this.currentTeam$ = this.route.paramMap
       .map(params => params && params.get('id'))
-      .switchMap( (teamId: string) => this.teamsService.getTeamById(teamId));
+      .do( (teamId: string) => this.teamsService.getTeamById(teamId))
+      .switchMap( () =>  this.teamsService.selectedTeam$);
   }
 
 }

@@ -12,22 +12,14 @@ import { ChooseTeamDialogComponent } from './components/choose-team-dialog/choos
 import {SharedModule} from '../shared/shared.module';
 import { UsersViewContainerComponent } from './containers/users-view-container/users-view-container.component';
 import {UsersRoutingModule} from './users-routing.module';
+import {MaterialModule} from '../material/material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     UsersRoutingModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatMenuModule,
-    MatIconModule,
-    MatListModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatOptionModule
+    MaterialModule
 
   ],
   providers: [UsersService, UsersDataService],

@@ -15,6 +15,7 @@ export class AppComponent {
   sideNavOpen = true;
 
   constructor(private store: Store<fromLayout.State>) { }
+
   sideNavToggled() {
     this.sideNavOpen = !this.sideNavOpen;
     if (this.sideNavOpen) {

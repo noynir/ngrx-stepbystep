@@ -1,4 +1,4 @@
-<app-layout  class="mat-typography" >
+<app-layout  class="mat-typography" [sideNavOpen]="sideNavOpen$ | async"  >
     <div sidenav  >
         <div class="side-nav">
             <mat-accordion displayMode="flat">
@@ -22,6 +22,9 @@
 
     </div>
     <div class="main">
+        <div class="sideNavToggle">
+          <app-sidenav-toggle (toggled)="sideNavToggle()" [toggle]="sideNavOpen$ | async" ></app-sidenav-toggle>
+        </div>
         <div class="content">
             <router-outlet></router-outlet>
         </div>

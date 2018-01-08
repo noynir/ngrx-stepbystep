@@ -9,13 +9,13 @@ import { TeamsDataService } from './services/teams-data.service';
 import { TeamViewContainerComponent } from './containers/team-view-container/team-view-container.component';
 import { TeamsRoutingModule } from './teams-routing.module';
 import { UsersModule } from '../users/users.module';
+import {MaterialModule} from '../material/material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     TeamsRoutingModule,
-    MatListModule,
-    MatTabsModule,
+    MaterialModule,
     UsersModule
   ],
   providers: [TeamsService, TeamsDataService],

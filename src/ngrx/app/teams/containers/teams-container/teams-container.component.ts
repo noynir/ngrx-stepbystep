@@ -15,7 +15,9 @@ export class TeamsContainerComponent implements OnInit {
   constructor(private teamsService: TeamsService) { }
 
   ngOnInit() {
-    this.teams$ = this.teamsService.getTeams();
+    this.teams$  = this.teamsService.allTeams$;
+
+    this.teamsService.getTeams();
   }
 
 }
