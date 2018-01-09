@@ -22,6 +22,9 @@
 
     </div>
     <div class="main">
+        <div class="sideNavToggle">
+          <app-sidenav-toggle (toggled)="sideNavToggle()" [toggle]="sideNavOpen" ></app-sidenav-toggle>
+        </div>
         <div class="content">
             <router-outlet></router-outlet>
         </div>

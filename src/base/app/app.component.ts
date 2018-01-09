@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as fromLayout from './core/reducers/layout';
-import * as fromLayoutActions from './core/actions/layout';
 
 
 @Component({
@@ -14,15 +11,11 @@ export class AppComponent {
 
   sideNavOpen = true;
 
-  constructor(private store: Store<fromLayout.State>) { }
+  constructor() { }
 
-  sideNavToggled() {
+  sideNavToggle() {
     this.sideNavOpen = !this.sideNavOpen;
-    if (this.sideNavOpen) {
-      this.store.dispatch(new fromLayoutActions.OpenSidenav());
-    } else {
-      this.store.dispatch(new fromLayoutActions.CloseSidenav());
-    }
+
   }
 
 }

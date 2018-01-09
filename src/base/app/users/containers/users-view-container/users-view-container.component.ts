@@ -8,7 +8,6 @@ import {TableEditAction, UserTableDataModel} from '../../models/UserTableData.mo
 import {ConfirmDialogComponent} from '../../../shared/confirm-dialog/confirm-dialog.component';
 import {UserModel} from '../../../models/user.model';
 import {ChooseTeamDialogComponent} from '../../components/choose-team-dialog/choose-team-dialog.component';
-import {Subject} from 'rxjs/Subject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 
@@ -21,13 +20,11 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 export class UsersViewContainerComponent implements OnInit {
 
   users$: Observable<Array<UserTableDataModel>>;
-  usersDataSource$: Observable<Array<UserTableDataModel>>;
-
-  usersDataSource: Array<UserTableDataModel>;
-
   private userUpdates$: BehaviorSubject<TableEditAction> = new BehaviorSubject<TableEditAction>(null);
 
   allTeams$: Observable<Array<Team>>;
+
+  allTeams: Array<Team>;
 
   constructor(private usersService: UsersService,
               private teamsService: TeamsService,
@@ -36,30 +33,56 @@ export class UsersViewContainerComponent implements OnInit {
 
       this.allTeams$ = this.teamsService.getTeams();
 
-      this.users$ =  Observable.combineLatest(
+      Observable.zip(
         this.usersService.getUsers(),
-        this.allTeams$,
-        this.userUpdates$.asObservable()
-      ).map( ([users, teams, action]) => {
-           return users.reduce((usersArr, user) => {
-              const targetUser = (action && action.users.find(u => u.id === user.id) );
+        this.allTeams$
+      ).map( ([users, teams]) => {
+          this.allTeams =teams;
+          return users.reduce((usersArr, user) => {
 
-              if(!targetUser){
-                const team = teams.find(t => t.id === user.teamId);
-                usersArr.push(Object.assign({}, user, {team: team}));
-              }
-              else if (action && action.type === 'updated' ){
-                const team = teams.find(t => t.id === targetUser.teamId);
-                usersArr.push(Object.assign({}, targetUser, {team: team}));
-              }
+               const team = teams.find(t => t.id === user.teamId);
+               usersArr.push(Object.assign({}, user, {team: team}));
 
+               return usersArr;
 
-              return usersArr;
             },[]);
-         });
+         })
+        .subscribe((data) => {
+          this.userUpdates$.next(new TableEditAction('add', data))
+        });
 
 
-      this.userUpdates$.next(null);
+      this.users$ = this.userUpdates$
+        .scan<any, any>( (acc, update) => {
+
+          if(update){
+
+            switch (update.type){
+              case 'add':
+                return acc.concat(update.users as UserTableDataModel[]);
+              case 'updated':
+                const arr = acc.map( user => {
+                  const u = update.users.find(u => u.id === user.id);
+                  if(u){
+                    const team = this.allTeams.find(t => t.id === u.teamId);
+                    u.team = team;
+                    return u;
+                  }
+
+                  return user;
+
+                });
+                return arr;
+              case 'delete':
+                return acc.filter( user => !(update.users.find(u => u.id === user.id) ));
+              default:
+                return acc;
+            }
+          }
+
+          return acc;
+
+      },[]);
 
 
   }

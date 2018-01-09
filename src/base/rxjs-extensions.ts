@@ -4,6 +4,7 @@ import 'rxjs/add/operator/merge';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/combineLatest';

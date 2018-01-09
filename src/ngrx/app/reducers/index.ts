@@ -1,6 +1,5 @@
 import * as fromLayout from '../core/reducers/layout';
 import {ActionReducerMap, createFeatureSelector, createSelector} from '@ngrx/store';
-import {AppState} from '../../../base/app/reducers';
 
 export interface AppState {
   layout: fromLayout.State;
