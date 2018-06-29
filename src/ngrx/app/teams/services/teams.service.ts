@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Team } from '../models/team-model';
 import { TeamsDataService } from './teams-data.service';
 import { UserModel } from '../../models/user.model';
 import * as fromTeams from '../reducers/teams';
 import {Store} from '@ngrx/store';
 import {TeamSelect, TeamsLoad} from '../actions/actions';
+import { withLatestFrom, map } from 'rxjs/operators';
 
 @Injectable()
 export class TeamsService {
@@ -16,8 +17,10 @@ export class TeamsService {
 
   get selectedTeam$(): Observable<Team> {
     return this.store.select(fromTeams.selectSelectedTeamId)
-      .withLatestFrom(this.store)
-      .map( ([teamId, state]) => fromTeams.selectSelectedTeam(state));
+      .pipe(
+        withLatestFrom(this.store),
+        map( ([teamId, state]) => fromTeams.selectSelectedTeam(state))
+      );
   }
 
   constructor(private store: Store<fromTeams.State>, private dataService: TeamsDataService) { }

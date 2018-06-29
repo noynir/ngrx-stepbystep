@@ -13,7 +13,7 @@ export enum UsersActionTypes {
   UsersSelect = '[Users] users select'
 }
 
-export class UsersLoad implements Action{
+export class UsersLoad implements Action {
   readonly type = UsersActionTypes.UsersLoad
   constructor(public payload?: UsersLoadOptions){}
 }

@@ -4,9 +4,10 @@ import {UserModel} from '../../models/user.model';
 import {AppState} from '../../reducers';
 import {Store} from '@ngrx/store';
 import {UserDelete, UsersActionTypes, UsersLoad, UsersSelect, UsersUpdate} from '../actions/users';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as fromUsers from '../reducers/users';
 import {UsersEffects} from '../effects/users';
+import { map } from 'rxjs/operators';
 
 
 
@@ -22,9 +23,9 @@ export class UsersService {
   }
 
   get usersUpdated$(): Observable<boolean> {
-    return this.effects.updateUsers$.map( action =>  action.type === UsersActionTypes.UsersUpateComplete);
+    return this.effects.updateUsers$.pipe(map( action =>  action.type === UsersActionTypes.UsersUpateComplete));
   }
-  getUsers(){
+  getUsers() {
     this.store.dispatch(new UsersLoad());
   }
 

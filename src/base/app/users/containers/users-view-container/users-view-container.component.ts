@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {UsersService} from '../../services/users.service';
 import {TeamsService} from '../../../teams/services/teams.service';
-import {Observable} from 'rxjs/Observable';
+import {Observable, zip, of} from 'rxjs';
 import {Team} from '../../../teams/models/team-model';
 import {TableEditAction, UserTableDataModel} from '../../models/UserTableData.model';
 import {ConfirmDialogComponent} from '../../../shared/confirm-dialog/confirm-dialog.component';
 import {UserModel} from '../../../models/user.model';
 import {ChooseTeamDialogComponent} from '../../components/choose-team-dialog/choose-team-dialog.component';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
+import { map, switchMap, scan } from 'rxjs/operators';
 
 
 
@@ -33,10 +34,11 @@ export class UsersViewContainerComponent implements OnInit {
 
       this.allTeams$ = this.teamsService.getTeams();
 
-      Observable.zip(
+      zip(
         this.usersService.getUsers(),
         this.allTeams$
-      ).map( ([users, teams]) => {
+      ).pipe(
+        map( ([users, teams]) => {
           this.allTeams =teams;
           return users.reduce((usersArr, user) => {
 
@@ -47,42 +49,45 @@ export class UsersViewContainerComponent implements OnInit {
 
             },[]);
          })
-        .subscribe((data) => {
+      )
+      .subscribe((data) => {
           this.userUpdates$.next(new TableEditAction('add', data))
-        });
+      });
 
 
       this.users$ = this.userUpdates$
-        .scan<any, any>( (acc, update) => {
+        .pipe(
+          scan<any, any>( (acc, update) => {
 
-          if(update){
+            if(update){
 
-            switch (update.type){
-              case 'add':
-                return acc.concat(update.users as UserTableDataModel[]);
-              case 'updated':
-                const arr = acc.map( user => {
-                  const u = update.users.find(u => u.id === user.id);
-                  if(u){
-                    const team = this.allTeams.find(t => t.id === u.teamId);
-                    u.team = team;
-                    return u;
-                  }
+              switch (update.type){
+                case 'add':
+                  return acc.concat(update.users as UserTableDataModel[]);
+                case 'updated':
+                  const arr = acc.map( user => {
+                    const u = update.users.find(u => u.id === user.id);
+                    if(u){
+                      const team = this.allTeams.find(t => t.id === u.teamId);
+                      u.team = team;
+                      return u;
+                    }
 
-                  return user;
+                    return user;
 
-                });
-                return arr;
-              case 'delete':
-                return acc.filter( user => !(update.users.find(u => u.id === user.id) ));
-              default:
-                return acc;
+                  });
+                  return arr;
+                case 'delete':
+                  return acc.filter( user => !(update.users.find(u => u.id === user.id) ));
+                default:
+                  return acc;
+              }
             }
-          }
 
-          return acc;
+            return acc;
 
-      },[]);
+        },[])
+      );
 
 
   }
@@ -96,16 +101,21 @@ export class UsersViewContainerComponent implements OnInit {
       });
 
       dialogRef.afterClosed()
-        .switchMap((result) => {
-          if(result){
-            let usersToMove=users.map( user => {
-              user.teamId = result;
-              return user;
-            });
-            return this.usersService.updateUsers( usersToMove ).map(res => usersToMove);
-          }
-          return Observable.of(null);
-        }).subscribe((res) => {
+        .pipe(
+          switchMap((result) => {
+            if(result){
+              const usersToMove = users.map( user => {
+                user.teamId = result;
+                return user;
+              });
+              return this.usersService.updateUsers( usersToMove )
+                .pipe(map(res => usersToMove));
+
+            }
+            return of(null);
+          })
+        )
+        .subscribe((res) => {
           if(res){
             this.userUpdates$.next(new TableEditAction('updated', res));
           }
@@ -124,12 +134,14 @@ export class UsersViewContainerComponent implements OnInit {
       });
 
       dialogRef.afterClosed()
-        .switchMap((result) => {
-          if(result){
-            return this.usersService.deleteUser(user.id);
-          }
-          return Observable.of(null);
-        }).subscribe((res) => {
+        .pipe(
+          switchMap((result) => {
+            if(result){
+              return this.usersService.deleteUser(user.id);
+            }
+            return of(null);
+          })
+        ).subscribe((res) => {
         if(res){
           if(res){
             this.userUpdates$.next(new TableEditAction('delete', users));

@@ -1,7 +1,7 @@
 import { TeamsService } from '../../services/teams.service';
 import { Component, OnInit } from '@angular/core';
 import { Team } from '../../models/team-model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-teams-container',

@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Action} from '@ngrx/store';
-import {Actions, Effect} from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import {TeamsDataService} from '../services/teams-data.service';
 import {TeamsActionsTypes, TeamsLoadComplete} from '../actions/actions';
+import { switchMap, map } from 'rxjs/operators';
 
 @Injectable()
 export class TeamsEffects{
@@ -12,8 +13,10 @@ export class TeamsEffects{
 
   @Effect()
   loadTeams$: Observable<Action> = this.actions$
-    .ofType(TeamsActionsTypes.TeamsLoad)
-    .switchMap(() =>  this.dataService.getTeamsData())
-    .map(data =>  new TeamsLoadComplete(data));
+    .pipe(
+      ofType(TeamsActionsTypes.TeamsLoad),
+      switchMap(() =>  this.dataService.getTeamsData()),
+      map(data =>  new TeamsLoadComplete(data))
+    )
 
 }

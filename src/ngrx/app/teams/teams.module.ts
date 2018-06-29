@@ -10,7 +10,7 @@ import { TeamsRoutingModule } from './teams-routing.module';
 import { UsersModule } from '../users/users.module';
 import {MaterialModule} from '../material/material.module';
 import {StoreModule} from '@ngrx/store';
-import * as fromTeams from './reducers/teams'
+import * as fromTeams from './reducers/teams';
 import {EffectsModule} from '@ngrx/effects';
 import {TeamsEffects} from './effects/teams';
 

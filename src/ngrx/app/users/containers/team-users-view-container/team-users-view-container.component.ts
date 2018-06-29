@@ -1,17 +1,16 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subscribable} from 'rxjs/Observable';
+import {Observable, Subscribable, combineLatest} from 'rxjs';
 import { UserModel } from '../../../models/user.model';
 import { UsersService } from '../../services/users.service';
 import {TeamsService} from '../../../teams/services/teams.service';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {ChooseTeamDialogComponent} from '../../components/choose-team-dialog/choose-team-dialog.component';
-import {Subject} from 'rxjs/Subject';
 import {ConfirmDialogComponent} from '../../../shared/confirm-dialog/confirm-dialog.component';
 import {Team} from '../../../teams/models/team-model';
 import {TableEditAction, UserTableDataModel} from '../../models/UserTableData.model';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-team-users-view-container',
@@ -34,7 +33,8 @@ export class TeamUsersViewContainerComponent implements OnInit,OnDestroy {
               private dialog: MatDialog) { }
   ngOnInit() {
 
-    this.route.paramMap.map(params => params && params.get('id'))
+    this.route.paramMap
+      .pipe(map(params => params && params.get('id')))
       .subscribe((id) => {
         this.teamId = id;
         this.loadUsers();
@@ -44,18 +44,26 @@ export class TeamUsersViewContainerComponent implements OnInit,OnDestroy {
     this.allTeams$ = this.teamsService.allTeams$;
     this.teamsService.getTeams();
 
-    this.teamMembers$ = Observable.combineLatest(
+    this.teamMembers$ = combineLatest(
       this.usersService.allUsers$,
       this.allTeams$
-    ).map( ([users, teams]) => {
+    ).pipe(
+      map( ([users, teams]) => {
         return users.map((user) => {
           const team = teams.find(t => t.id === user.teamId);
           return Object.assign({}, user, { team: team});
         });
-      });
+      })
+    );
 
-    this.userUpdatesSub = this.usersService.usersUpdated$.filter(res => !!res).subscribe(res => this.loadUsers() );
+
+    this.userUpdatesSub = this.usersService.usersUpdated$
+      .pipe(
+        filter(res => !!res)
+      )
+      .subscribe(res => this.loadUsers() );
   }
+
 
   loadUsers(){
     this.usersService.getTeamUsers(this.teamId);

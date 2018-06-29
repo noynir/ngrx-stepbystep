@@ -1,16 +1,16 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, combineLatest, of } from 'rxjs';
 import { UserModel } from '../../../models/user.model';
 import { UsersService } from '../../services/users.service';
 import {TeamsService} from '../../../teams/services/teams.service';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {ChooseTeamDialogComponent} from '../../components/choose-team-dialog/choose-team-dialog.component';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {ConfirmDialogComponent} from '../../../shared/confirm-dialog/confirm-dialog.component';
 import {Team} from '../../../teams/models/team-model';
-import {TableEditAction, UserTableDataModel} from '../../models/UserTableData.model';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {UserTableDataModel} from '../../models/UserTableData.model';
+import { map, share, startWith, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-team-users-view-container',
@@ -33,22 +33,28 @@ export class TeamUsersViewContainerComponent implements OnInit {
 
   ngOnInit() {
     const params$ = this.route.paramMap
-        .map(params => params && params.get('id'));
+        .pipe(
+          map(params => params && params.get('id'))
+        );
 
-    this.allTeams$ = this.teamsService.getTeams().share();
+    this.allTeams$ = this.teamsService.getTeams()
+      .pipe(share());
 
-    this.teamMembers$ = Observable.combineLatest(params$,
+    this.teamMembers$ = combineLatest(params$,
       this.allTeams$,
-      this.dialogClosedResult$.startWith(0),
+      this.dialogClosedResult$.pipe(startWith(0)),
       (teamId, teams) => ({ teamId, teams })
-    ).switchMap( ( data ) => this.usersService.getTeamUsers(data.teamId),
-        (data, users) => ({users: users, teams: data.teams}) )
-      .map( data => {
+    ).pipe(
+      switchMap( ( data ) => this.usersService.getTeamUsers(data.teamId),
+        (data, users) => ({users: users, teams: data.teams}) ),
+      map( data => {
         return data.users.map((user) => {
           const team = data.teams.find(t => t.id === user.teamId);
           return Object.assign({}, user, { team: team});
-        });
+        })
       })
+    );
+
   }
 
   moveUsers(users: Array<UserModel>){
@@ -60,15 +66,17 @@ export class TeamUsersViewContainerComponent implements OnInit {
      });
 
      dialogRef.afterClosed()
-       .switchMap((result) => {
-         if(result){
-           return this.usersService.updateUsers( users.map( user=>{
-             user.teamId = result;
-             return user;
-           }));
-         }
-         return Observable.of(null);
-       }).subscribe((res) => {
+      .pipe(
+        switchMap((result) => {
+          if(result){
+            return this.usersService.updateUsers( users.map(user => {
+              user.teamId = result;
+              return user;
+            }));
+          }
+          return of(null);
+        })
+      ).subscribe((res) => {
          if(res){
           this.dialogClosedResult$.next(res.teamId);
          }
@@ -86,15 +94,18 @@ export class TeamUsersViewContainerComponent implements OnInit {
       });
 
       dialogRef.afterClosed()
-        .switchMap((result) => {
-          if(result){
-            return this.usersService.updateUsers( users.map( user =>{
-              user.teamId = null;
-              return user;
-            }));
-          }
-          return Observable.of(null);
-        }).subscribe((res) => {
+        .pipe(
+          switchMap((result) => {
+            if(result){
+              return this.usersService.updateUsers( users.map( user =>{
+                user.teamId = null;
+                return user;
+              }));
+            }
+            return of(null);
+          })
+        )
+        .subscribe((res) => {
           if(res){
             this.dialogClosedResult$.next(res.teamId);
           }

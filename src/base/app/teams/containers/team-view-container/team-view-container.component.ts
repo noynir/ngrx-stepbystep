@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {TeamsService} from '../../services/teams.service';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Team} from '../../models/team-model';
 import {ActivatedRoute} from '@angular/router';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-team-view-container',
@@ -19,8 +20,10 @@ export class TeamViewContainerComponent implements OnInit {
 
 
     this.currentTeam$ = this.route.paramMap
-      .map(params => params && params.get('id'))
-      .switchMap( (teamId: string) => this.teamsService.getTeamById(teamId));
+      .pipe(
+        map(params => params && params.get('id')),
+        switchMap( (teamId: string) => this.teamsService.getTeamById(teamId))
+      );
   }
 
 }

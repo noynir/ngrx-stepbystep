@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Team } from '../models/team-model';
 import { TeamsDataService } from './teams-data.service';
 import { TemplateAst } from '@angular/compiler';
