@@ -14,16 +14,18 @@ export class TeamViewContainerComponent implements OnInit {
 
   currentTeam$ : Observable<Team>;
 
-  constructor(private route: ActivatedRoute, private teamsService: TeamsService) { }
+  constructor(private teamsService: TeamsService) { }
 
   ngOnInit() {
-    this.currentTeam$ = this.route.paramMap
-      .pipe(
-        map(params => params && params.get('id')),
-        tap( (teamId: string) => this.teamsService.getTeamById(teamId)),
-        switchMap( () =>  this.teamsService.selectedTeam$)
-      )
+    // this.currentTeam$ = this.route.paramMap
+    //   .pipe(
+    //     map(params => params && params.get('id')),
+    //     tap( (teamId: string) => this.teamsService.getTeamById(teamId)),
+    //     switchMap( () =>  this.teamsService.selectedTeam$)
+    //   )
 
+    this.currentTeam$ = this.teamsService.selectedTeam$
+ 
   }
 
 }

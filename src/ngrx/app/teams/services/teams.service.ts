@@ -16,11 +16,7 @@ export class TeamsService {
   }
 
   get selectedTeam$(): Observable<Team> {
-    return this.store.select(fromTeams.selectSelectedTeamId)
-      .pipe(
-        withLatestFrom(this.store),
-        map( ([teamId, state]) => fromTeams.selectSelectedTeam(state))
-      );
+    return this.store.select(fromTeams.selectSelectedTeam);
   }
 
   constructor(private store: Store<fromTeams.State>, private dataService: TeamsDataService) { }

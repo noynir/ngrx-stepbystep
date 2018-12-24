@@ -13,6 +13,8 @@ import {EffectsModule} from '@ngrx/effects';
 import {environment} from '../environments/environment';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {MaterialModule} from './material/material.module';
+import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
+import { CustomSerializer } from './custom-router-serializer';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,9 @@ import {MaterialModule} from './material/material.module';
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot(fromRoot.reducers),
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router'
+    }),
     !environment.production ?
       StoreDevtoolsModule.instrument({
         maxAge: 25 // Retains last 25 states
@@ -33,7 +38,9 @@ import {MaterialModule} from './material/material.module';
     TeamsModule,
     UsersModule
   ],
-  providers: [],
+  providers: [
+    { provide: RouterStateSerializer, useClass: CustomSerializer }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -49,8 +49,14 @@ export const {
   selectTotal
 } = adapter.getSelectors(selectCurrentTeams);
 
-export const selectSelectedTeam =  createSelector(selectEntities, selectSelectedTeamId , (entities,teamId) => {
- return teamId && entities[teamId];
-});
+// export const selectSelectedTeam =  createSelector(selectEntities, selectSelectedTeamId , (entities,teamId) => {
+//  return teamId && entities[teamId];
+// });
+
+export const selectSelectedTeam =  createSelector( 
+  fromRoot.getRouterParams,
+  selectEntities,
+  (routeParams, teams) => routeParams && teams[routeParams.get('id')] 
+)
 
 
