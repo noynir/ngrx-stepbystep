@@ -4,7 +4,7 @@
   "newProjectRoot": "projects",
   "projects": {
     "base": {
-      "root": "src",
+      "root": "./",
       "sourceRoot": "src",
       "projectType": "application",
       "architect": {
@@ -357,5 +357,8 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+  },
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
   }
 }
