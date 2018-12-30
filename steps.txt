@@ -1,0 +1,10 @@
+Create Layout Actions
+  ng g action layout --group true
+
+Create root store
+  ng generate store State --root --module app.module.ts -d
+
+Create the layout reducer
+  ng generate reducer layout --reducers reducers/index.ts --group true -d
+
+...

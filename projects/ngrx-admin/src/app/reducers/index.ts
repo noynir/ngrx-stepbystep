@@ -6,7 +6,7 @@ import { RouterStateUrl } from '../custom-router-serializer';
 
 export interface AppState {
   layout: fromLayout.State;
-  router: RouterReducerState
+  router: RouterReducerState;
 }
 
 const initialState = {
