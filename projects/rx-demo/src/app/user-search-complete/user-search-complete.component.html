@@ -1,0 +1,10 @@
+<input
+    (keyup)="searchTerm$.next($event)" 
+    placeholder="Search User"
+    />
+
+<ul *ngIf="results$ | async as results">
+  <li *ngFor="let user of results">
+    <h2>{{ user.name}} | {{user.email}} </h2>
+  </li>
+</ul>

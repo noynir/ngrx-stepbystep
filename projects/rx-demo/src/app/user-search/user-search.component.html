@@ -1,0 +1,9 @@
+<input 
+    placeholder="Search User"
+    />
+
+<ul *ngIf="results">
+  <li *ngFor="let user of results">
+    <h2>{{ user.name}} | {{user.email}} </h2>
+  </li>
+</ul>

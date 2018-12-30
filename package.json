@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
+    "start:rx-demo":"ng serve --project rx-demo", 
     "start": "run-p -c start:ngrx:*",
     "start:ngrx:server": "node ./server",
     "start:ngrx:ng": "ng serve --project ngrx-admin",
